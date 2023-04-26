@@ -14,20 +14,10 @@ const yoga = createYoga({
           "This is the `greetings` field of the root `Query` type",
       },
     },
-  })
+  }),
+  fetchAPI: {
+    Response: Response
+  }
 });
 
-export async function POST(request: Request) {
-  const result = await yoga.fetch(request.url, {
-    method: 'POST',
-    headers: request.headers,
-    body: await request.text(),
-  });
-
-  return new Response(result.body, {
-    status: result.status,
-    headers: result.headers,
-  });
-}
-
-// export { yoga as GET, yoga as POST };
+export { yoga as GET, yoga as POST };

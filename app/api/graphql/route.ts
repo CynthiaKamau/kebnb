@@ -20,6 +20,7 @@ const { handleRequest: yoga } = createYoga({
     },
   }),
   fetchAPI: {
+    Request: Request,
     Response: Response
   }
 });

@@ -24,14 +24,17 @@
     "init": "^0.1.2",
     "next": "13.3.0",
     "prisma": "4.14.1",
+    "raw-body": "^2.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "stripe": "12.7.0",
     "typescript": "5.0.4"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "3.3.1",
     "@graphql-codegen/typescript": "3.0.4",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
+    "@types/stripe": "8.0.417",
     "autoprefixer": "10.4.14",
     "postcss": "8.4.23",
     "tailwindcss": "^3.3.2"

@@ -10,6 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         String  @id @default(uuid())
+  firstName  String
+  middleName String?
+  lastName   String
+  roleId     String
+  username   String
+  email      String  @unique
+  password   String
+  role       Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model Role {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  User        User[]
+}
+
 model Cart {
   id    String     @id @default(uuid())
   items CartItem[]

@@ -9,6 +9,8 @@ generates:
       mappers:
         Cart: "@prisma/client#Cart"
         CartItem: "@prisma/client#CartItem"
+        Role: "@prisma/client#Role"
+        User: "@prisma/client#User"
     plugins:
       - "typescript"
       - "typescript-resolvers"

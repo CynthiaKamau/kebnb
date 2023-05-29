@@ -1,5 +1,9 @@
 type Query {
   cart(id: ID!): Cart
+  user(id: ID!): User
+  users: [User]
+  roles: [Role]
+  role(id: ID!): Role
 }
 
 type Mutation {
@@ -8,6 +12,8 @@ type Mutation {
   increaseCartItem(input: IncreaseCartItemInput!): Cart
   decreaseCartItem(input: DecreaseCartItemInput!): Cart
   createCheckoutSession(input: CreateCheckoutSessionInput!): CheckoutSession
+  addUser(input: addUserInput!): User
+  addRole(input: addRoleInput!): Role
 }
 
 type Cart {
@@ -15,6 +21,23 @@ type Cart {
   totalItems: Int!
   items: [CartItem!]!
   subTotal: Money!
+}
+
+type User {
+  id: ID!
+  firstName: String!
+  middleName: String
+  lastName: String
+  username: String!
+  email: String
+  roleId: String!
+  password: String
+}
+
+type Role {
+  id: ID!
+  name: String!
+  description: String
 }
 
 type Money {
@@ -64,4 +87,19 @@ input DecreaseCartItemInput {
 
 input CreateCheckoutSessionInput {
   cartId: ID!
+}
+
+input addUserInput {
+  firstName: String!
+  middleName: String
+  lastName: String
+  username: String!
+  email: String
+  roleId: String!
+  password: String
+}
+
+input addRoleInput {
+  name: String
+  description: String
 }

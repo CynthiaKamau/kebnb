@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Cart as CartModel, CartItem as CartItemModel } from '@prisma/client';
+import { Cart as CartModel, CartItem as CartItemModel, Role as RoleModel, User as UserModel } from '@prisma/client';
 import { GraphQLContext } from './pages/api/index';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -74,6 +74,8 @@ export type Money = {
 export type Mutation = {
   __typename?: 'Mutation';
   addItem?: Maybe<Cart>;
+  addRole?: Maybe<Role>;
+  addUser?: Maybe<User>;
   createCheckoutSession?: Maybe<CheckoutSession>;
   decreaseCartItem?: Maybe<Cart>;
   increaseCartItem?: Maybe<Cart>;
@@ -83,6 +85,16 @@ export type Mutation = {
 
 export type MutationAddItemArgs = {
   input: AddToCartInput;
+};
+
+
+export type MutationAddRoleArgs = {
+  input: AddRoleInput;
+};
+
+
+export type MutationAddUserArgs = {
+  input: AddUserInput;
 };
 
 
@@ -108,6 +120,10 @@ export type MutationRemoveItemArgs = {
 export type Query = {
   __typename?: 'Query';
   cart?: Maybe<Cart>;
+  role?: Maybe<Role>;
+  roles?: Maybe<Array<Maybe<Role>>>;
+  user?: Maybe<User>;
+  users?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -115,9 +131,53 @@ export type QueryCartArgs = {
   id: Scalars['ID'];
 };
 
+
+export type QueryRoleArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
+};
+
 export type RemoveFromCart = {
   cartId: Scalars['ID'];
   id: Scalars['ID'];
+};
+
+export type Role = {
+  __typename?: 'Role';
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  email?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  middleName?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  roleId: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type AddRoleInput = {
+  description?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type AddUserInput = {
+  email?: InputMaybe<Scalars['String']>;
+  firstName: Scalars['String'];
+  lastName?: InputMaybe<Scalars['String']>;
+  middleName?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  roleId: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -205,7 +265,11 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   RemoveFromCart: RemoveFromCart;
+  Role: ResolverTypeWrapper<RoleModel>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  User: ResolverTypeWrapper<UserModel>;
+  addRoleInput: AddRoleInput;
+  addUserInput: AddUserInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -224,7 +288,11 @@ export type ResolversParentTypes = {
   Mutation: {};
   Query: {};
   RemoveFromCart: RemoveFromCart;
+  Role: RoleModel;
   String: Scalars['String'];
+  User: UserModel;
+  addRoleInput: AddRoleInput;
+  addUserInput: AddUserInput;
 };
 
 export type CartResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = {
@@ -260,6 +328,8 @@ export type MoneyResolvers<ContextType = GraphQLContext, ParentType extends Reso
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationAddItemArgs, 'input'>>;
+  addRole?: Resolver<Maybe<ResolversTypes['Role']>, ParentType, ContextType, RequireFields<MutationAddRoleArgs, 'input'>>;
+  addUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationAddUserArgs, 'input'>>;
   createCheckoutSession?: Resolver<Maybe<ResolversTypes['CheckoutSession']>, ParentType, ContextType, RequireFields<MutationCreateCheckoutSessionArgs, 'input'>>;
   decreaseCartItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationDecreaseCartItemArgs, 'input'>>;
   increaseCartItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationIncreaseCartItemArgs, 'input'>>;
@@ -268,6 +338,29 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>;
+  role?: Resolver<Maybe<ResolversTypes['Role']>, ParentType, ContextType, RequireFields<QueryRoleArgs, 'id'>>;
+  roles?: Resolver<Maybe<Array<Maybe<ResolversTypes['Role']>>>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+};
+
+export type RoleResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Role'] = ResolversParentTypes['Role']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  roleId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {
@@ -277,5 +370,7 @@ export type Resolvers<ContextType = GraphQLContext> = {
   Money?: MoneyResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Role?: RoleResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 

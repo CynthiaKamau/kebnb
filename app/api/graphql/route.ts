@@ -36,6 +36,30 @@ const { handleRequest: yoga } = createYoga<{
         cart: async (_, { id }) => {
           return findOrCreateCart(prisma, id);
         },
+        user: async (_, { id }) => {
+          const u = await prisma.user.findUnique({
+            where: {
+              id,
+            },
+          });
+          return u;
+        },
+        users: async () => {
+          const users = await prisma.user.findMany();
+          return users;
+        },
+        roles: async () => {
+          const r = await prisma.role.findMany();
+          return r;
+        },
+        role: async (_, { id }) => {
+          const r = await prisma.role.findUnique({
+            where: {
+              id,
+            },
+          });
+          return r;
+        },
       },
       Cart: {
         items: async ({ id }, _) => {
@@ -100,6 +124,7 @@ const { handleRequest: yoga } = createYoga<{
         },
       },
       Mutation: {
+        // cart actions
         addItem: async (_, { input }) => {
           const cart = await findOrCreateCart(prisma, input.cartId);
 
@@ -153,80 +178,93 @@ const { handleRequest: yoga } = createYoga<{
               },
             },
             select: {
-              cartId: true
-            }
+              cartId: true,
+            },
           });
-          return findOrCreateCart(prisma, cartId)
+          return findOrCreateCart(prisma, cartId);
         },
         decreaseCartItem: async (_, { input }) => {
           const { cartId, quantity } = await prisma.cartItem.update({
             data: {
               quantity: {
-                decrement: 1
+                decrement: 1,
               },
             },
             where: {
               id_cartId: {
                 id: input.id,
-                cartId: input.cartId
-              }
+                cartId: input.cartId,
+              },
             },
             select: {
               cartId: true,
-              quantity: true
-            }
+              quantity: true,
+            },
           });
-          if(quantity < 0) {
+          if (quantity < 0) {
             await prisma.cartItem.delete({
               where: {
                 id_cartId: {
                   id: input.id,
-                  cartId: input.cartId
-                }
-              }
-            })
+                  cartId: input.cartId,
+                },
+              },
+            });
           }
-          return findOrCreateCart(prisma, cartId)
+          return findOrCreateCart(prisma, cartId);
         },
         createCheckoutSession: async (_, { input }) => {
           const { cartId } = input;
           const cart = await prisma.cart.findUnique({
             where: {
-              id: cartId
-            }
-          })
-
-          if(!cart) {
-            throw new GraphQLError('Cart does not exisit');
-          }
-
-          const cartItems = await prisma.cart.findUnique({
-            where: {
               id: cartId,
             },
-          }).items()
+          });
 
-          if(!cartItems || cartItems?.length === 0) {
-            throw new GraphQLError('Cart is empty');
+          if (!cart) {
+            throw new GraphQLError("Cart does not exisit");
+          }
+
+          const cartItems = await prisma.cart
+            .findUnique({
+              where: {
+                id: cartId,
+              },
+            })
+            .items();
+
+          if (!cartItems || cartItems?.length === 0) {
+            throw new GraphQLError("Cart is empty");
           }
 
           const line_items = validateCartItems(products, cartItems);
 
           const session = await stripe.checkout.sessions.create({
             line_items,
-            mode: 'payment',
+            mode: "payment",
             metadata: {
-              cartId: cart.id
+              cartId: cart.id,
             },
-            success_url: 'http://localhost:3000/thankyou?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url: 'http://localhost:3000/cart?cancelled=true'
-          })
+            success_url:
+              "http://localhost:3000/thankyou?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url: "http://localhost:3000/cart?cancelled=true",
+          });
 
           return {
             id: session.id,
-            url: session?.url
-          }
-        }
+            url: session?.url,
+          };
+        },
+        //user actions
+        addUser: async (_, { input }) => {
+          const newUser = await prisma.user.create({ data: input });
+          return newUser;
+        },
+        // role actions
+        addRole: async (_, { input }) => {
+          const role = await prisma.role.create({ data: input });
+          return role;
+        },
       },
     },
   }),

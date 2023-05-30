@@ -6,6 +6,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -26,12 +27,19 @@ export type AddToCartInput = {
   quantity?: InputMaybe<Scalars['Int']>;
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  token: Scalars['String'];
+  user?: Maybe<User>;
+};
+
 export type Cart = {
   __typename?: 'Cart';
   id: Scalars['ID'];
   items: Array<CartItem>;
   subTotal: Money;
   totalItems: Scalars['Int'];
+  userId: User;
 };
 
 export type CartItem = {
@@ -79,7 +87,9 @@ export type Mutation = {
   createCheckoutSession?: Maybe<CheckoutSession>;
   decreaseCartItem?: Maybe<Cart>;
   increaseCartItem?: Maybe<Cart>;
+  login?: Maybe<AuthPayload>;
   removeItem?: Maybe<Cart>;
+  signUp?: Maybe<AuthPayload>;
 };
 
 
@@ -113,8 +123,18 @@ export type MutationIncreaseCartItemArgs = {
 };
 
 
+export type MutationLoginArgs = {
+  input: LoginInput;
+};
+
+
 export type MutationRemoveItemArgs = {
   input: RemoveFromCart;
+};
+
+
+export type MutationSignUpArgs = {
+  input: AddUserInput;
 };
 
 export type Query = {
@@ -178,6 +198,11 @@ export type AddUserInput = {
   password?: InputMaybe<Scalars['String']>;
   roleId: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type LoginInput = {
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -252,6 +277,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AddToCartInput: AddToCartInput;
+  AuthPayload: ResolverTypeWrapper<Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Cart: ResolverTypeWrapper<CartModel>;
   CartItem: ResolverTypeWrapper<CartItemModel>;
@@ -270,11 +296,13 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<UserModel>;
   addRoleInput: AddRoleInput;
   addUserInput: AddUserInput;
+  loginInput: LoginInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   AddToCartInput: AddToCartInput;
+  AuthPayload: Omit<AuthPayload, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   Boolean: Scalars['Boolean'];
   Cart: CartModel;
   CartItem: CartItemModel;
@@ -293,6 +321,13 @@ export type ResolversParentTypes = {
   User: UserModel;
   addRoleInput: AddRoleInput;
   addUserInput: AddUserInput;
+  loginInput: LoginInput;
+};
+
+export type AuthPayloadResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CartResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = {
@@ -300,6 +335,7 @@ export type CartResolvers<ContextType = GraphQLContext, ParentType extends Resol
   items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
   subTotal?: Resolver<ResolversTypes['Money'], ParentType, ContextType>;
   totalItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -333,7 +369,9 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   createCheckoutSession?: Resolver<Maybe<ResolversTypes['CheckoutSession']>, ParentType, ContextType, RequireFields<MutationCreateCheckoutSessionArgs, 'input'>>;
   decreaseCartItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationDecreaseCartItemArgs, 'input'>>;
   increaseCartItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationIncreaseCartItemArgs, 'input'>>;
+  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   removeItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationRemoveItemArgs, 'input'>>;
+  signUp?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationSignUpArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -364,6 +402,7 @@ export type UserResolvers<ContextType = GraphQLContext, ParentType extends Resol
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {
+  AuthPayload?: AuthPayloadResolvers<ContextType>;
   Cart?: CartResolvers<ContextType>;
   CartItem?: CartItemResolvers<ContextType>;
   CheckoutSession?: CheckoutSessionResolvers<ContextType>;

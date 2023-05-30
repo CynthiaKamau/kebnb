@@ -9,6 +9,8 @@ import { currencyCode, findOrCreateCart, validateCartItems } from "@/lib/cart";
 import { GraphQLError } from "graphql";
 import { stripe } from "@/lib/stripe";
 import { products } from "@/lib/products";
+import { sign } from "jsonwebtoken";
+import { compare, hash } from "bcrypt";
 
 export type GraphQLContext = {
   prisma: PrismaClient;
@@ -264,6 +266,32 @@ const { handleRequest: yoga } = createYoga<{
         addRole: async (_, { input }) => {
           const role = await prisma.role.create({ data: input });
           return role;
+        },
+        signUp: async (_, { input }) => {
+          const password = await hash(input.password, 10);
+          const newUser = await prisma.user.create({
+            data: { ...input, password },
+          });
+          return newUser;
+        },
+        login: async (_, { input }) => {
+          const user = await prisma.user.findUnique({
+            where: { email: input.email },
+          });
+          if (!user) {
+            throw new Error("User does not exist");
+          }
+
+          const validToken = await compare(input.password, user.password);
+          if (!validToken) {
+            throw new Error("Invalid password, please try again");
+          }
+
+          const token = sign({ userId: user.id }, "secret");
+          return {
+            token,
+            user,
+          };
         },
       },
     },

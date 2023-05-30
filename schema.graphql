@@ -14,6 +14,18 @@ type Mutation {
   createCheckoutSession(input: CreateCheckoutSessionInput!): CheckoutSession
   addUser(input: addUserInput!): User
   addRole(input: addRoleInput!): Role
+  signUp(input: addUserInput!): AuthPayload
+  login(input: loginInput!): AuthPayload
+}
+
+type AuthPayload {
+  token: String!
+  user: User
+}
+
+input loginInput {
+  email: String
+  password: String
 }
 
 type Cart {
@@ -21,6 +33,7 @@ type Cart {
   totalItems: Int!
   items: [CartItem!]!
   subTotal: Money!
+  userId: User! 
 }
 
 type User {

@@ -20,18 +20,21 @@ model User {
   email      String  @unique
   password   String
   role       Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  cart       Cart[]
 }
 
 model Role {
   id          String  @id @default(uuid())
   name        String
   description String?
-  User        User[]
+  user        User[]
 }
 
 model Cart {
-  id    String     @id @default(uuid())
-  items CartItem[]
+  id     String     @id @default(uuid())
+  items  CartItem[]
+  userId String?
+  user   User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model CartItem {

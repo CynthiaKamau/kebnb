@@ -44,7 +44,17 @@ type User {
   username: String!
   email: String
   roleId: String!
+  role: Role
+  profile: Profile
   password: String
+}
+
+type Profile {
+  addressOne: String
+  addressTwo: String
+  zip: String
+  dob: String
+  userId: User! 
 }
 
 type Role {

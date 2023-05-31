@@ -2,7 +2,7 @@ import { createYoga, createSchema } from "graphql-yoga";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { prisma } from "../../../lib/prisma";
-import type { PrismaClient } from "@prisma/client";
+import type { PrismaClient, User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import currencyFormatter from "currency-formatter";
 import { currencyCode, findOrCreateCart, validateCartItems } from "@/lib/cart";
@@ -19,7 +19,7 @@ export type GraphQLContext = {
 export async function createContext(): Promise<GraphQLContext> {
   return {
     prisma,
-  };
+  }
 }
 
 const typeDefs = readFileSync(join(process.cwd(), "schema.graphql"), {
@@ -47,7 +47,12 @@ const { handleRequest: yoga } = createYoga<{
           return u;
         },
         users: async () => {
-          const users = await prisma.user.findMany();
+          const users = (await prisma.user.findMany({
+            include: {
+              role: true,
+              profile: true
+            }
+          }));
           return users;
         },
         roles: async () => {

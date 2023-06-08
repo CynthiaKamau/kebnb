@@ -43,6 +43,10 @@ const { handleRequest: yoga } = createYoga<{
             where: {
               id,
             },
+            include: {
+              role: true,
+              profile: true,
+            }
           });
           return u;
         },
@@ -304,7 +308,7 @@ const { handleRequest: yoga } = createYoga<{
         },
         login: async (_, { input }) => {
           const user = await prisma.user.findUnique({
-            where: { email: input.email },
+            where: { email: input.email }, include: { profile: true, role: true }
           });
           if (!user) {
             throw new Error("User does not exist");

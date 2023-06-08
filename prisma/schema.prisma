@@ -19,44 +19,55 @@ model User {
   username   String
   email      String   @unique
   password   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
   cart       Cart[]
   profile    Profile?
 }
 
 model Profile {
-  id         String @id @default(uuid())
-  addressOne String
-  addressTwo String
-  zip        String
-  dob        String
-  userId     String @unique
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  addressOne String?
+  addressTwo String?
+  zip        String?
+  dob        String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Role {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
-  user        User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User[]
 }
 
 model Cart {
-  id     String     @id @default(uuid())
-  items  CartItem[]
-  userId String?
-  user   User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String     @id @default(uuid())
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userId    String?
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model CartItem {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
   price       Int
   quantity    Int
   image       String?
   cartId      String
-  cart        Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
 
   @@unique([id, cartId])
 }

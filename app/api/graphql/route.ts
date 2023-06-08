@@ -19,7 +19,7 @@ export type GraphQLContext = {
 export async function createContext(): Promise<GraphQLContext> {
   return {
     prisma,
-  }
+  };
 }
 
 const typeDefs = readFileSync(join(process.cwd(), "schema.graphql"), {
@@ -47,12 +47,12 @@ const { handleRequest: yoga } = createYoga<{
           return u;
         },
         users: async () => {
-          const users = (await prisma.user.findMany({
+          const users = await prisma.user.findMany({
             include: {
               role: true,
-              profile: true
-            }
-          }));
+              profile: true,
+            },
+          });
           return users;
         },
         roles: async () => {
@@ -275,7 +275,30 @@ const { handleRequest: yoga } = createYoga<{
         signUp: async (_, { input }) => {
           const password = await hash(input.password, 10);
           const newUser = await prisma.user.create({
-            data: { ...input, password },
+            data: {
+              firstName: input.firstName,
+              middleName: input.middleName,
+              lastName: input.lastName,
+              roleId: input.roleId,
+              username: input.username,
+              email: input.email,
+              password,
+              profile: {
+                create: {
+                  addressOne: input.profile.addressOne,
+                  addressTwo: input.profile.addressTwo,
+                  zip: input.profile.zip,
+                  dob: input.profile.dob,
+                },
+              },
+            },
+            include: {
+              profile: {
+                select: {
+                  dob: true,
+                },
+              },
+            },
           });
           return newUser;
         },

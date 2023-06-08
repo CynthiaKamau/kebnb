@@ -139,11 +139,12 @@ export type MutationSignUpArgs = {
 
 export type Profile = {
   __typename?: 'Profile';
-  addressOne?: Maybe<Scalars['String']>;
-  addressTwo?: Maybe<Scalars['String']>;
-  dob?: Maybe<Scalars['String']>;
+  addressOne: Scalars['String'];
+  addressTwo: Scalars['String'];
+  dob: Scalars['String'];
+  id: Scalars['ID'];
   userId: User;
-  zip?: Maybe<Scalars['String']>;
+  zip: Scalars['String'];
 };
 
 export type Query = {
@@ -196,6 +197,13 @@ export type User = {
   username: Scalars['String'];
 };
 
+export type AddProfileInput = {
+  addressOne: Scalars['String'];
+  addressTwo: Scalars['String'];
+  dob: Scalars['String'];
+  zip: Scalars['String'];
+};
+
 export type AddRoleInput = {
   description?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -207,6 +215,7 @@ export type AddUserInput = {
   lastName?: InputMaybe<Scalars['String']>;
   middleName?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  profile?: InputMaybe<AddProfileInput>;
   roleId: Scalars['String'];
   username: Scalars['String'];
 };
@@ -306,6 +315,7 @@ export type ResolversTypes = {
   Role: ResolverTypeWrapper<RoleModel>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<UserModel>;
+  addProfileInput: AddProfileInput;
   addRoleInput: AddRoleInput;
   addUserInput: AddUserInput;
   loginInput: LoginInput;
@@ -332,6 +342,7 @@ export type ResolversParentTypes = {
   Role: RoleModel;
   String: Scalars['String'];
   User: UserModel;
+  addProfileInput: AddProfileInput;
   addRoleInput: AddRoleInput;
   addUserInput: AddUserInput;
   loginInput: LoginInput;
@@ -388,11 +399,12 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 };
 
 export type ProfileResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
-  addressOne?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  addressTwo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dob?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  addressOne?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  addressTwo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  dob?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  zip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  zip?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

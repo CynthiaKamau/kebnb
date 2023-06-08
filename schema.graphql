@@ -50,10 +50,11 @@ type User {
 }
 
 type Profile {
-  addressOne: String
-  addressTwo: String
-  zip: String
-  dob: String
+  id: ID!
+  addressOne: String!
+  addressTwo: String!
+  zip: String!
+  dob: String!
   userId: User! 
 }
 
@@ -120,6 +121,14 @@ input addUserInput {
   email: String
   roleId: String!
   password: String
+  profile: addProfileInput
+}
+
+input addProfileInput {
+  addressOne: String!
+  addressTwo: String
+  zip: String
+  dob: String!
 }
 
 input addRoleInput {

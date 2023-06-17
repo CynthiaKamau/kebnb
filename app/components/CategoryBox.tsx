@@ -7,13 +7,11 @@ import qs from "query-string";
 
 interface CategoryBoxProps {
   label: string;
-  key: string;
   icon: IconType;
   selected?: boolean;
 }
 const CategoryBox: React.FC<CategoryBoxProps> = ({
   label,
-  key,
   icon: Icon,
   selected,
 }) => {
@@ -48,7 +46,6 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   return (
     <div
       onClick={handleClick}
-      key={key}
       className={`flex flex-col items-center
      justify-center gap-2 p-3 border-b-2 hover:text-neutral-800 transition cursor-pointer
      ${selected ? "border-b-neutral-800" : "border-transparent"}

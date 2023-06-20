@@ -22,7 +22,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const currentUser = await getCurrentUser()
+  const currentUser = await getCurrentUser();
   return (
     <html lang="en">
       <body className={font.className}>
@@ -33,7 +33,10 @@ export default async function RootLayout({
           <RentModal />
           <Navbar currentUser={currentUser} />
         </ClientOnly>
-        {children}
+
+        <div className="pb-20 pt-28 bg-white">
+          {children}
+        </div>
       </body>
     </html>
   );

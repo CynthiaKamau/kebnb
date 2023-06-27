@@ -1,15 +1,17 @@
 import { Inter } from "next/font/google";
 import getCurrentUser from "./actions/getCurrentUser";
-import getListings from "./actions/getListings";
+import getListings, { ILisitngsParams } from "./actions/getListings";
 import ClientOnly from "./components/ClientOnly";
 import Container from "./components/Container";
 import EmptyState from "./components/EmptyState";
 import ListingCard from "./components/lisitngs/ListingCard";
 
-const inter = Inter({ subsets: ["latin"] });
+interface HomeProps {
+  searchParams: ILisitngsParams
+};
 
-export default async function Home() {
-  const listings = await getListings();
+const Home = async ({ searchParams }: HomeProps) => {
+  const listings = await getListings(searchParams);
   const currentUser = await getCurrentUser();
 
 
@@ -28,3 +30,5 @@ export default async function Home() {
     </ClientOnly>
   );
 }
+
+export default Home;

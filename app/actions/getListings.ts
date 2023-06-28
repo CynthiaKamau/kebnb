@@ -1,3 +1,5 @@
+import prisma from "@/app/libs/prismadb";
+
 export interface ILisitngsParams {
   userId?: string;
   guestCount?: number;

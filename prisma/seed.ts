@@ -181,6 +181,96 @@ async function seedData() {
         price: 100,
       },
     });
+    const listing7 = await prisma.listing.create({
+      data: {
+        userId: user1.id,
+        title: "Ashley on Beach 409",
+        description: "Beach Front Self-catering apartment. This 4th-floor fully furnished apartment offers spectacular sea views. It offers 2 bedrooms; main bedroom with sea view is equipped with a queen-size bed, and the second room has 2 single beds. Both offers crisp linen and towels. Well equipped kitchen with dishwasher, gas stove, microwave & fridge. The complex also offers laundry room, barbecue facilities, tennis court & parking. This Apartment offers the following: 10mg wifi, Netflix, Premium DSTV.",
+        imgSrc:
+          "https://res.cloudinary.com/durnvux33/image/upload/v1688056415/prop42_amci0x.webp",
+        category: "Beach",
+        roomCount: 2,
+        bathroomCount: 2,
+        guestCount: 5,
+        locationValue: "KE",
+        price: 64,
+      },
+    });
+    const listing8 = await prisma.listing.create({
+      data: {
+        userId: user2.id,
+        title: "The Constant Gardener tiny cosy single bedroom",
+        description: "Built in 1919, Rosslyn is one of Nairobi's oldest and most special surviving homes. Set in 2 acres of private gardens we are close to UN, Village Market and Westlands. We have 2 singles, 1 double & 1 bathroom with separate listings on airbnb",
+        imgSrc:
+          "https://res.cloudinary.com/durnvux33/image/upload/v1688056310/prop41_nobabi.webp",
+        category: "Arctic",
+        roomCount: 3,
+        bathroomCount: 1,
+        guestCount: 2,
+        locationValue: "KE",
+        price: 62,
+      },
+    });
+    const listing9 = await prisma.listing.create({
+      data: {
+        userId: user3.id,
+        title: "Knysna Lodge Glamping Cabin",
+        description:"Completely private unit, you won't be sharing the facilities with anyone! Tucked away in the trees it's like staying in your very own treehouse with spectacular views of Knysna lagoon and you'll have a private covered Kol Kol wood-fired hot tub! Equipped with everything you need including WiFi (and Netflix, even during loadshedding!), hot shower and toilet, gas cooking & braai facilities. Excellent location, the ideal spot to getaway from it all!",
+        imgSrc:
+          "https://res.cloudinary.com/durnvux33/image/upload/v1688056687/prop43_eutxaa.webp",
+        category: "Lake",
+        roomCount: 1,
+        bathroomCount: 2,
+        guestCount: 2,
+        locationValue: "KE",
+        price: 217,
+      },
+    });
+    const listing10 = await prisma.listing.create({
+      data: {
+        userId: user1.id,
+        title: "KI Love Alghero",
+        description:"Intimate and well-kept apartment in the heart of the characteristic historic center of Alghero (ZTL with limited traffic), just 100 meters from the sea, in the oldest street: clean, quiet and far from the chaos of the city. Guests 4 capsules a day for the coffee machine provided. Equipped with VMC (continuous air change in-out), wi-fi, TV, air conditioner, kitchen complete with dishes + appliances, aromatherapy diffuser, bathroom with hydro-massage jet shower and hairdryer. UIN code Q2096",
+        imgSrc:
+          "https://res.cloudinary.com/durnvux33/image/upload/v1688056886/prop44_aoxf2r.webp",
+        category: "Lux",
+        roomCount: 1,
+        bathroomCount: 1,
+        guestCount: 2,
+        locationValue: "KE",
+        price: 98,
+      },
+    });
+    const listing11 = await prisma.listing.create({
+      data: {
+        userId: user2.id,
+        title: "The Nest a romantic getaway",
+        description: "Luxurious open-plan Cottage with a King-sized bed and a Sofa bed, full kitchen, living area with a TV, and fireplace, patio with loungers and a hot tub and a bathroom with bathtub, vanity and a private outside shower.",
+        imgSrc:
+          "https://res.cloudinary.com/durnvux33/image/upload/v1688057355/prop45_blejra.webp",
+        category: "Barns",
+        roomCount: 1,
+        bathroomCount: 1,
+        guestCount: 2,
+        locationValue: "KE",
+        price: 106,
+      },
+    });
+    const listing12 = await prisma.listing.create({
+      data: {
+        userId: user3.id,
+        title: "Christine's",
+        description: "Close to the airport, Fancourt Country Club and George Golf Club Safe neighborhood, opposite park with beautiful mountain views. Close to town, shopping centre and gym (Virgin Active)",
+        imgSrc:
+          "https://res.cloudinary.com/durnvux33/image/upload/v1688057606/prop46_xyzq1i.webp",
+        category: "Barns",
+        roomCount: 1,
+        bathroomCount: 1,
+        guestCount: 2,
+        locationValue: "KE",
+        price: 27,
+      },
+    });
 
     // Seed data for Reservation model
     const reservation1 = await prisma.reservation.create({
